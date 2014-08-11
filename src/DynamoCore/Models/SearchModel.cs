@@ -680,6 +680,17 @@ namespace Dynamo.Search
             return true;
         }
 
+        public bool Add(CustomNodeDefinition nodeInfo)
+        {
+            return Add(
+                new CustomNodeInfo(
+                    nodeInfo.FunctionId,
+                    nodeInfo.DisplayName,
+                    nodeInfo.WorkspaceModel.Category,
+                    nodeInfo.WorkspaceModel.Description,
+                    nodeInfo.WorkspaceModel.FileName));
+        }
+
         #endregion
 
         #region Execution

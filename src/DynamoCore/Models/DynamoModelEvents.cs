@@ -10,6 +10,8 @@ using Dynamo.ViewModels;
 
 namespace Dynamo.Models
 {
+    public delegate void NodeEventHandler(object sender, EventArgs e);
+
     partial class DynamoModel
     {
         #region events

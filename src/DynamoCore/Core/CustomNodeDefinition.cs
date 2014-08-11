@@ -4,7 +4,6 @@ using System.Linq;
 using Dynamo.DSEngine;
 using Dynamo.Models;
 using Dynamo.Nodes;
-using Dynamo.Search;
 using Dynamo.Utilities;
 using Dynamo.ViewModels;
 
@@ -245,16 +244,6 @@ namespace Dynamo
 
         #region Custom Node Management
 
-        public bool AddToSearch(SearchModel search)
-        {
-            return
-                search.Add(new CustomNodeInfo(  FunctionId, 
-                                                WorkspaceModel.Name,
-                                                WorkspaceModel.Category,
-                                                WorkspaceModel.Description,
-                                                WorkspaceModel.FileName ));
-        }
-
         public void UpdateCustomNodeManager(CustomNodeManager customNodeManager)
         {
             customNodeManager.SetNodeInfo(new CustomNodeInfo(   FunctionId,
@@ -278,7 +267,7 @@ namespace Dynamo
                 // search
                 if (addToSearch)
                 {
-                    AddToSearch(dynamoModel.SearchModel);
+                    dynamoModel.SearchModel.Add(this);
                 }
 
                 var info = new CustomNodeInfo(FunctionId, functionWorkspace.Name, functionWorkspace.Category,
