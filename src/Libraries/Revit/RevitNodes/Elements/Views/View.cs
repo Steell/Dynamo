@@ -34,7 +34,7 @@ namespace Revit.Elements.Views
         /// </summary>
         /// <param name="fullPath">A valid path for the image</param>
         /// <returns>The image</returns>
-        public System.Drawing.Image ExportAsImage(string fullPath)
+        public string ExportAsImage(string fullPath)
         {
             string pathName = fullPath;
             string extension = null;
@@ -82,18 +82,22 @@ namespace Revit.Elements.Views
 
             Document.ExportImage(options);
 
-            // Revit outputs file with a bunch of crap in the file name, let's construct that
-            var actualFn = string.Format("{0} - {1} - {2}{3}", pathName, ViewTypeString(InternalView.ViewType),
-                InternalView.ViewName, extension);
-
             // and the intended destination
             var destFn = pathName + extension;
 
-            // rename the file
-            if (File.Exists(destFn)) File.Delete(destFn);
-            File.Move(actualFn, destFn);
+            return destFn;
 
-            return Image.FromFile(destFn);
+            //// Revit outputs file with a bunch of crap in the file name, let's construct that
+            //var actualFn = string.Format("{0} - {1} - {2}{3}", pathName, ViewTypeString(InternalView.ViewType),
+            //    InternalView.ViewName, extension);
+
+            //// rename the file
+            //if (File.Exists(destFn))
+            //    File.Delete(destFn);
+
+            //File.Move(actualFn, destFn);
+
+            //return Image.FromFile(destFn);
         }
 
         private string ViewTypeString(ViewType vt)

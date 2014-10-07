@@ -14,11 +14,9 @@ using Image = System.Windows.Controls.Image;
 namespace Dynamo.Nodes
 {
 
-    [NodeName("Watch Image")]
-    [NodeDescription("Previews an image")]
-    [NodeCategory(BuiltinNodeCategories.CORE_VIEW)]
-    [NodeSearchTags("image")]
-    [IsDesignScriptCompatible]
+    [NodeName("Watch Image"), NodeDescription("Previews an image"),
+     NodeCategory(BuiltinNodeCategories.CORE_VIEW), NodeSearchTags("image"),
+     IsDesignScriptCompatible]
     public class WatchImageCore : NodeModel, IWpfNode
     {
         private Image image;
@@ -31,7 +29,7 @@ namespace Dynamo.Nodes
             RegisterAllPorts();
         }
 
-        internal override IEnumerable<AssociativeNode> BuildAst(List<AssociativeNode> inputAstNodes)
+        override internal IEnumerable<AssociativeNode> BuildAst(List<AssociativeNode> inputAstNodes)
         {
             var resultAst = new List<AssociativeNode>
             {
@@ -47,12 +45,12 @@ namespace Dynamo.Nodes
             {
                 MaxWidth = 400,
                 MaxHeight = 400,
-                HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center,
                 Name = "image1",
-                VerticalAlignment = System.Windows.VerticalAlignment.Center
+                VerticalAlignment = VerticalAlignment.Center
             };
 
-            this.PropertyChanged += (sender, args) => 
+            PropertyChanged += (sender, args) =>
             {
                 if (args.PropertyName != "IsUpdated") return;
                 var im = GetImageFromMirror();
@@ -63,7 +61,7 @@ namespace Dynamo.Nodes
             nodeUi.PresentationGrid.Visibility = Visibility.Visible;
         }
 
-        private void SetImageSource(System.Drawing.Bitmap bmp)
+        private void SetImageSource(Bitmap bmp)
         {
             if (bmp == null)
                 return;
@@ -73,15 +71,20 @@ namespace Dynamo.Nodes
             // need to call Dispose manually somewhere, or perhaps use a WPF native structure instead of bitmap?
 
             var hbitmap = bmp.GetHbitmap();
-            var imageSource = Imaging.CreateBitmapSourceFromHBitmap(hbitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromWidthAndHeight(bmp.Width, bmp.Height));
-            image.Source =  imageSource;
+            var imageSource = Imaging.CreateBitmapSourceFromHBitmap(
+                hbitmap,
+                IntPtr.Zero,
+                Int32Rect.Empty,
+                BitmapSizeOptions.FromWidthAndHeight(bmp.Width, bmp.Height));
+            image.Source = imageSource;
         }
 
-        private System.Drawing.Bitmap GetImageFromMirror()
+        private Bitmap GetImageFromMirror()
         {
-            if (this.InPorts[0].Connectors.Count == 0) return null;
+            if (InPorts[0].Connectors.Count == 0) return null;
 
-            var mirror = this.Workspace.DynamoModel.EngineController.GetMirror(AstIdentifierForPreview.Name);
+            var mirror =
+                Workspace.DynamoModel.EngineController.GetMirror(AstIdentifierForPreview.Name);
 
             if (null == mirror)
                 return null;
@@ -89,7 +92,7 @@ namespace Dynamo.Nodes
             var data = mirror.GetData();
 
             if (data == null || data.IsNull) return null;
-            if (data.Data is System.Drawing.Bitmap) return data.Data as System.Drawing.Bitmap;
+            if (data.Data is Bitmap) return data.Data as Bitmap;
             return null;
         }
 
